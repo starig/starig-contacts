@@ -1,0 +1,46 @@
+.item {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  width: 250px;
+  height: 45px;
+  background-color: #e6cebc;
+  border-radius: 5px;
+  .itemBody {
+    .itemHeader {
+      display: flex;
+      .secondName {
+        margin-left: 5px;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+    }
+    .number {
+      display: flex;
+      align-items: center;
+      margin-top: 10px;
+      color: #5c846f;
+      font-weight: 300;
+    }
+  }
+
+
+  .itemButtons {
+    display: flex;
+    align-items: center;
+    font-size: 28px;
+
+    .buttonDelete {
+      color: #e63946;
+    }
+
+    >svg {
+      transition: opacity .2s ease-in-out;
+      &:hover {
+        cursor: pointer;
+        opacity: .4;
+      }
+    }
+  }
+
+}

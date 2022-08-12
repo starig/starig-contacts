@@ -1,0 +1,27 @@
+.container {
+  display: flex;
+
+  .contacts {
+    display: grid;
+    justify-items: center;
+    padding-top: 20px;
+    width: 100%;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 100px;
+  }
+  @media (max-width: 1600px) {
+    .contacts {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  @media (max-width: 1160px) {
+    .contacts {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 800px) {
+    .contacts {
+      grid-template-columns: repeat(1, 1fr);
+    }
+  }
+}
