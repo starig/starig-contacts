@@ -1,15 +1,42 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import styles from './Sidebar.module.scss';
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../redux/store";
-import { GrStreetView } from "react-icons/gr";
+import {GrStreetView} from "react-icons/gr";
+import {addContact} from "../../redux/contacts/slice";
+import {nanoid} from "@reduxjs/toolkit";
+import {updateSearchValue} from "../../redux/search/slice";
 
 const Sidebar: FC = () => {
     const {username} = useSelector((state: RootState) => state.user);
-    const [searchValue, setSearchValue] = useState<string>('');
+    const {searchValue} = useSelector((state: RootState) => state.search);
+    const [currentSearchValue, setCurrentSearchValue] = useState<string>(searchValue)
     const [newContactName, setNewContactName] = useState<string>('');
     const [newContactSurname, setNewContactSurname] = useState<string>('');
     const [newContactNumber, setNewContactNumber] = useState<string>('');
+    const [isError, setIsError] = useState<boolean>(false);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(updateSearchValue(currentSearchValue));
+    },[currentSearchValue])
+
+    const createNewContact = () => {
+        if (newContactName === '' || newContactSurname === '' || newContactNumber === '') {
+            setIsError(true)
+        } else {
+            setIsError(false);
+            dispatch(addContact({
+                id: nanoid(),
+                name: newContactName,
+                surname: newContactSurname,
+                phone: newContactNumber
+            }));
+            setNewContactName('');
+            setNewContactSurname('');
+            setNewContactNumber('');
+        }
+    }
 
     return (
         <div className={styles.sidebar}>
@@ -18,13 +45,15 @@ const Sidebar: FC = () => {
             </div>
             <div className={styles.search}>
                 <input className={styles.searchInput}
-                       value={searchValue}
+                       value={currentSearchValue}
                        placeholder={'Search contact...'}
-                       onChange={(e) => setSearchValue(e.target.value)}/>
+                       onChange={(e) => setCurrentSearchValue(e.target.value)}/>
             </div>
             <div className={styles.newContact}>
                 <div className={styles.newContactTitle}>create new conctact</div>
-                <div className={styles.newContactError}>Error: empty input</div>
+                {
+                    isError && <div className={styles.newContactError}>Error: empty input</div>
+                }
                 <div className={styles.newContactSection}>
                     <input className={styles.newContactInput}
                            value={newContactName}
@@ -45,7 +74,7 @@ const Sidebar: FC = () => {
                            placeholder={'Phone number'}
                            onChange={(e) => setNewContactNumber(e.target.value)}/>
                 </div>
-                <button className={styles.newContactButton}>
+                <button className={styles.newContactButton} onClick={createNewContact}>
                     create new contact <GrStreetView />
                 </button>
             </div>
